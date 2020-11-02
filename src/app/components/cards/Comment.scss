@@ -1,7 +1,7 @@
 .Comment {
   position: relative;
   clear: both;
-  margin-bottom: 2.4rem;
+  margin-bottom: 1.2rem;
   .Markdown {
     p {
       margin: 0.1rem 0 0.6rem 0;
@@ -10,6 +10,15 @@
     p:last-child {
       margin-bottom: 0.2rem;
     }
+  }
+
+  .ReplyEditor .column.large-6 {
+      max-width: 100%;
+      flex: 0 0 100%;
+  }
+
+  .ReplyEditor .side-by-side {
+      height: auto;
   }
 }
 
@@ -20,6 +29,10 @@
   padding-right: 0.6rem;
   @include MQ(M) {
     top: 0.2rem;
+  }
+
+  .Userpic {
+    margin-left: 7px;
   }
 }
 
@@ -43,7 +56,8 @@
   }
 }
 
-.Comment.collapsed {
+.Comment.collapsed .Comment__block,
+.Comment .Comment__block.downvoted:not(.revealed) {
   > .Comment__Userpic {
     top: 0;
     left: 26px;
@@ -63,23 +77,38 @@
       }
     }
   }
+  .Comment__body {
+    @include themify($themes) {
+      padding: 0;
+      border: none;
+    }
+  }
+  .Comment__footer {
+    @include themify($themes) {
+      padding: 0;
+      border: none;
+    }
+  }
 }
 
 .Comment__header {
-  margin-left: 62px;
+  @include themify($themes) {
+    margin-left: 62px;
+    border-radius: themed('roundedCornersTop');
+    border: themed('border');
+    background: themed('moduleBackgroundColor');
+    padding: 3px 5px;
+  }
 }
 
 .Comment__header-user {
   color: $black;
   font-size: 100%;
-  font-weight: 600;
-  a {    
+  a {
     @extend .link;
     @extend .link--primary;
   }
 }
-
-
 
 .Comment__header_collapse {
   float: right;
@@ -93,13 +122,27 @@
   }
 }
 
-.Comment__body {
-  margin-left: 62px;
-  max-width: 50rem;
+.Comment .Comment__block .Comment__body {
+  @include themify($themes) {
+    margin-left: 62px;
+    border: themed('border');
+    padding: 0 5px;
+    border-top: none;
+    border-bottom: none;
+    font-size: 90%;
+    background: themed('moduleBackgroundColor');
+  }
 }
 
-.Comment__footer {
-  margin-left: 62px;
+.Comment .Comment__block .Comment__footer {
+  @include themify($themes) {
+    margin-left: 62px;
+    border: themed('border');
+    border-radius: themed('roundedCornersBottom');
+    padding: 3px 10px 5px 10px;
+    background: themed('moduleBackgroundColor');
+  }
+
   @include themify($themes) {
     color: themed('textColorPrimary');
   }
@@ -111,20 +154,20 @@
     @include themify($themes) {
       border-right: themed('border');
     }
-    padding-right: 1rem;
-    margin-right: 1rem;
+    padding-right: 0.4rem;
+    margin-right: 0.4rem;
     transition: 0.3s all ease-in-out;
     .dropdown-arrow {
       position: relative;
       top: 3px;
       left: -2px;
-    }     
+    }
     &:hover {
       .Icon.dropdown-arrow polygon {
           @include themify($themes) {
             fill: themed('textColorAccent');
-          }     
-      }      
+          }
+      }
     }
   }
 
@@ -136,6 +179,9 @@
 .Comment__replies {
   margin-top: 1.4rem;
   margin-left: 62px;
+  @include themify($themes) {
+    border-left: themed('borderDotted');
+  }
   .Comment {
     margin-bottom: 1.4rem;
   }
@@ -152,81 +198,31 @@
     }
 }
 
-.depth {
-  position: absolute;
-  top: 20px;
-  left: 0;
-  color: $dark-gray;
-}
-
-.Comment.collapsed > .depth {
-  top: 2px;
-}
-
-.depth.di-1 {
-  left: -38px;
-}
-
-.depth.di-2 {
-  left: -100px;
-}
-
-.depth.di-3 {
-  left: -162px;
-}
-
-.depth.di-4 {
-  left: -224px;
-}
-
-.depth.di-5 {
-  left: -286px;
-}
-
-.depth.di-6 {
-  left: -348px;
-}
-
 @media screen and (max-width: 39.9375em) {
   .root {
-    .Comment__header, .Comment__footer, .Comment__body, .Comment__replies {
-      margin-left: 0;
+    .Comment__block .Comment__header,
+    .Comment__block .Comment__footer,
+    .Comment__block .Comment__body,
+    .Comment__replies {
+      @include themify($themes) {
+        margin-left: 0;
+      }
     }
   }
   .reply {
-    .Comment__header, .Comment__footer, .Comment__body, .Comment__replies {
-      margin-left: 20px;
+    .Comment__block .Comment__header,
+    .Comment__block .Comment__footer,
+    .Comment__block .Comment__body,
+    .Comment__replies {
+      @include themify($themes) {
+        margin-left: 10px;
+      }
     }
   }
 
-  .depth {
-    top: 2px;
-  }
-
-  .depth.di-1 {
-    left: 0;
-  }
-
-  .depth.di-2 {
-    left: -20px;
-  }
-
-  .depth.di-3 {
-    left: -40px;
-  }
-
-  .depth.di-4 {
-    left: -60px;
-  }
-
-  .depth.di-5 {
-    left: -80px;
-  }
-
-  .depth.di-6 {
-    left: -100px;
-  }
-  .Comment .highlighted { 
-    padding-left: 0;
+  .Comment .Comment__block .highlighted {
+    @include themify($themes) {
+      padding-left: 0;
+    }
   }
 }

@@ -11,8 +11,10 @@ export default function ServerHTML({
     shouldSeeAds,
     adClient,
     gptEnabled,
+    gptBannedTags,
     gptBidding,
     fomoId,
+    reviveEnabled,
     shouldSeeCookieConsent,
     cookieConsentApiKey,
 }) {
@@ -60,105 +62,80 @@ export default function ServerHTML({
                 <link rel="manifest" href="/static/manifest.json" />
                 <link rel="icon" type="image/x-icon" href="/favicon.ico?v=2" />
                 <link
-                    rel="apple-touch-icon-precomposed"
+                    rel="apple-touch-icon"
                     sizes="57x57"
-                    href="/images/favicons/apple-touch-icon-57x57.png"
-                    type="image/png"
+                    href="/images/favicons/apple-icon-57x57.png"
                 />
                 <link
-                    rel="apple-touch-icon-precomposed"
-                    sizes="114x114"
-                    href="/images/favicons/apple-touch-icon-114x114.png"
-                    type="image/png"
-                />
-                <link
-                    rel="apple-touch-icon-precomposed"
-                    sizes="72x72"
-                    href="/images/favicons/apple-touch-icon-72x72.png"
-                    type="image/png"
-                />
-                <link
-                    rel="apple-touch-icon-precomposed"
-                    sizes="144x144"
-                    href="/images/favicons/apple-touch-icon-144x144.png"
-                    type="image/png"
-                />
-                <link
-                    rel="apple-touch-icon-precomposed"
+                    rel="apple-touch-icon"
                     sizes="60x60"
-                    href="/images/favicons/apple-touch-icon-60x60.png"
-                    type="image/png"
+                    href="/images/favicons/apple-icon-60x60.png"
                 />
                 <link
-                    rel="apple-touch-icon-precomposed"
-                    sizes="120x120"
-                    href="/images/favicons/apple-touch-icon-120x120.png"
-                    type="image/png"
+                    rel="apple-touch-icon"
+                    sizes="72x72"
+                    href="/images/favicons/apple-icon-72x72.png"
                 />
                 <link
-                    rel="apple-touch-icon-precomposed"
+                    rel="apple-touch-icon"
                     sizes="76x76"
-                    href="/images/favicons/apple-touch-icon-76x76.png"
-                    type="image/png"
+                    href="/images/favicons/apple-icon-76x76.png"
                 />
                 <link
-                    rel="apple-touch-icon-precomposed"
+                    rel="apple-touch-icon"
+                    sizes="114x114"
+                    href="/images/favicons/apple-icon-114x114.png"
+                />
+                <link
+                    rel="apple-touch-icon"
+                    sizes="120x120"
+                    href="/images/favicons/apple-icon-120x120.png"
+                />
+                <link
+                    rel="apple-touch-icon"
+                    sizes="144x144"
+                    href="/images/favicons/apple-icon-144x144.png"
+                />
+                <link
+                    rel="apple-touch-icon"
                     sizes="152x152"
-                    href="/images/favicons/apple-touch-icon-152x152.png"
-                    type="image/png"
+                    href="/images/favicons/apple-icon-152x152.png"
+                />
+                <link
+                    rel="apple-touch-icon"
+                    sizes="180x180"
+                    href="/images/favicons/apple-icon-180x180.png"
                 />
                 <link
                     rel="icon"
                     type="image/png"
-                    href="/images/favicons/favicon-196x196.png"
-                    sizes="196x196"
+                    sizes="192x192"
+                    href="/images/favicons/android-icon-192x192.png"
                 />
                 <link
                     rel="icon"
                     type="image/png"
-                    href="/images/favicons/favicon-96x96.png"
-                    sizes="96x96"
-                />
-                <link
-                    rel="icon"
-                    type="image/png"
-                    href="/images/favicons/favicon-32x32.png"
                     sizes="32x32"
+                    href="/images/favicons/favicon-32x32.png"
                 />
                 <link
                     rel="icon"
                     type="image/png"
-                    href="/images/favicons/favicon-16x16.png"
+                    sizes="96x96"
+                    href="/images/favicons/favicon-96x96.png"
+                />
+                <link
+                    rel="icon"
+                    type="image/png"
                     sizes="16x16"
+                    href="/images/favicons/favicon-16x16.png"
                 />
-                <link
-                    rel="icon"
-                    type="image/png"
-                    href="/images/favicons/favicon-128.png"
-                    sizes="128x128"
-                />
-                <meta name="application-name" content={APP_NAME} />
-                <meta name="msapplication-TileColor" content="#FFFFFF" />
+                <meta name="msapplication-TileColor" content="#ffffff" />
                 <meta
                     name="msapplication-TileImage"
-                    content="/images/favicons/mstile-144x144.png"
+                    content="/images/favicons/ms-icon-144x144.png"
                 />
-                <meta
-                    name="msapplication-square70x70logo"
-                    content="/images/favicons/mstile-70x70.png"
-                />
-                <meta
-                    name="msapplication-square150x150logo"
-                    content="/images/favicons/mstile-150x150.png"
-                />
-                <meta
-                    name="msapplication-wide310x150logo"
-                    content="/images/favicons/mstile-310x150.png"
-                />
-                <meta
-                    name="msapplication-square310x310logo"
-                    content="/images/favicons/mstile-310x310.png"
-                />
+                <meta name="theme-color" content="#ffffff" />
                 <link
                     href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600"
                     rel="stylesheet"
@@ -181,25 +158,22 @@ export default function ServerHTML({
                     <script
                         dangerouslySetInnerHTML={{
                             __html: `
-                            var freestar = freestar || {};
-                            freestar.hitTime = Date.now();
-                            freestar.queue = freestar.queue || [];
-                            freestar.config = freestar.config || {};
-                            freestar.debug =
-                            window.location.search.indexOf("fsdebug") === -1 ? false : true; // NICE.
-                            freestar.config.enabled_slots = [];
-
-                            !(function(a, b) {
-                            var c = b.getElementsByTagName("script")[0],
-                              d = b.createElement("script"),
-                              e = "https://a.pub.network/steemit-com";
-                            (e += freestar.debug ? "/qa/pubfig.min.js" : "/pubfig.min.js"),
-                              (d.async = !0),
-                              (d.src = e),
-                              c.parentNode.insertBefore(d, c);
-                            })(window, document);
+                            (function() {
+                              var bsa_optimize = document.createElement('script');
+                              window.optimize = { queue: [] };
+                              bsa_optimize.type = 'text/javascript';
+                              bsa_optimize.async = true;
+                              bsa_optimize.src = 'https://cdn-s2s.buysellads.net/pub/steemit.js?' + (new Date() - new Date() % 3600000);
+                              (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(bsa_optimize);
+                            })();
                         `,
                         }}
+                    />
+                ) : null}
+                {gptEnabled ? (
+                    <script
+                        src="//m.servedby-buysellads.com/monetization.js"
+                        type="text/javascript"
                     />
                 ) : null}
                 {shouldSeeCookieConsent ? (
@@ -211,6 +185,24 @@ export default function ServerHTML({
                         async
                     />
                 ) : null}
+                {adClient ? (
+                    <script
+                        async
+                        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+                    />
+                ) : null}
+                {adClient ? (
+                    <script
+                        dangerouslySetInnerHTML={{
+                            __html: `
+                      (adsbygoogle = window.adsbygoogle || []).push({
+                          google_ad_client: "${adClient}",
+                          enable_page_level_ads: true
+                      });
+                  `,
+                        }}
+                    />
+                ) : null}
                 {fomoId ? (
                     <script
                         async
@@ -218,6 +210,34 @@ export default function ServerHTML({
                         src={`https://load.fomo.com/ads/load.js?id=${fomoId}`}
                     />
                 ) : null}
+                {reviveEnabled ? (
+                    <script
+                        async
+                        src="//servedby.revive-adserver.net/asyncjs.php"
+                    />
+                ) : null}
+                <script
+                    dangerouslySetInnerHTML={{
+                        __html: `
+                        window.twttr = (function(d, s, id) {
+                            var js, fjs = d.getElementsByTagName(s)[0],
+                            t = window.twttr || {};
+                            if (d.getElementById(id)) return t;
+                            js = d.createElement(s);
+                            js.id = id;
+                            js.src = "https://platform.twitter.com/widgets.js";
+                            fjs.parentNode.insertBefore(js, fjs);
+
+                            t._e = [];
+                            t.ready = function(f) {
+                            t._e.push(f);
+                        };
+
+                            return t;
+                        }(document, "script", "twitter-wjs"));
+                        `,
+                    }}
+                />
                 <title>{page_title}</title>
             </head>
             <body>
@@ -230,6 +250,19 @@ export default function ServerHTML({
                 {assets.script.map((href, idx) => (
                     <script key={idx} src={href} />
                 ))}
+                {/* gptEnabled ? (
+                    <script
+                        dangerouslySetInnerHTML={{
+                            __html: `
+                            (function(){
+                              if(typeof _bsa !== 'undefined' && _bsa) {
+                                _bsa.init('fancybar', 'CE7D653L', 'placement:steemitcom');
+                              }
+                            })();
+                        `,
+                        }}
+                    />
+                      ) : null*/}
             </body>
         </html>
     );

@@ -4,6 +4,9 @@ import { connect } from 'react-redux';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import { cleanReduxInput } from 'app/utils/ReduxForms';
 import tt from 'counterpart';
+import { APP_MAX_TAG } from 'app/client_config';
+
+const MAX_TAG = APP_MAX_TAG || 10;
 
 class CategorySelector extends React.Component {
     static propTypes = {
@@ -54,9 +57,10 @@ class CategorySelector extends React.Component {
     }
     render() {
         const { trending, tabIndex, disabled } = this.props;
+        // TODO: figure out category tags
         const categories = trending
-            .slice(0, 11)
-            .filterNot(c => validateCategory(c));
+            ? trending.slice(0, 11).filterNot(c => validateCategory(c))
+            : [];
         const { createCategory } = this.state;
 
         const categoryOptions = categories.map((c, idx) => (
@@ -101,9 +105,9 @@ export function validateCategory(category, required = true) {
     const cats = category.trim().split(' ');
     return (
         // !category || category.trim() === '' ? 'Required' :
-        cats.length > 10
+        cats.length > MAX_TAG
             ? tt('category_selector_jsx.use_limited_amount_of_categories', {
-                  amount: 10,
+                  amount: MAX_TAG,
               })
             : cats.find(c => c.length > 24)
               ? tt('category_selector_jsx.maximum_tag_length_is_24_characters')

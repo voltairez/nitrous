@@ -1,6 +1,7 @@
 import * as config from 'config';
 import * as https from 'https';
 import * as steem from '@steemit/steem-js';
+import { getContentAsync } from 'app/utils/steemApi';
 
 function loadPinnedPosts() {
     return new Promise((resolve, reject) => {
@@ -20,10 +21,15 @@ function loadPinnedPosts() {
                 data += chunk;
             });
             resp.on('end', () => {
-                const json = JSON.parse(data);
-                console.info('Received pinned posts payload', json);
-                if (json === Object(json)) {
-                    resolve(json);
+                try {
+                    const json = JSON.parse(data);
+                    console.info('Received pinned posts payload', json);
+                    if (json === Object(json)) {
+                        resolve(json);
+                    }
+                } catch (err) {
+                    console.error('Could not load pinned posts', err);
+                    resolve(emptyPinnedPosts);
                 }
             });
         });
@@ -44,9 +50,10 @@ export async function pinnedPosts() {
         notices: [],
     };
 
+    loadedPostData.announcement = postData.announcement;
     for (const url of postData.pinned_posts) {
         const [username, postId] = url.split('@')[1].split('/');
-        let post = await steem.api.getContentAsync(username, postId);
+        let post = await getContentAsync(username, postId);
         post.pinned = true;
         loadedPostData.pinned_posts.push(post);
     }
@@ -56,7 +63,7 @@ export async function pinnedPosts() {
             const [username, postId] = notice.permalink
                 .split('@')[1]
                 .split('/');
-            let post = await steem.api.getContentAsync(username, postId);
+            let post = await getContentAsync(username, postId);
             loadedPostData.notices.push(Object.assign({}, notice, post));
         } else {
             loadedPostData.notices.push(notice);
