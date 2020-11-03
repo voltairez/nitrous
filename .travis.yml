@@ -17,10 +17,10 @@ deploy:
   script:
     bash docker_push
   on:
-    branch: scotty_sports
+    branch: scotty_sports_staging
 
 # safelist
 branches:
   only:
   - master
-  - scotty_sports
+  - scotty_sports_staging
