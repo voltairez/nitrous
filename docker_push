@@ -2,6 +2,6 @@
 echo "Docker Login"
 echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin registry.heroku.com
 echo "Docker Push"
-docker push registry.heroku.com/sportstalksocial/web:latest
+docker push registry.heroku.com/sportstalk-social/web:latest
 echo "Heroku Release"
-heroku container:release web --app sportstalksocial
+heroku container:release web --app sportstalk-social
